@@ -1,0 +1,13 @@
+version: '3'
+services:
+    exampleservice:
+        build:
+            context: .
+            dockerfile: Dockerfile_poetryworkflow
+        image: exampleservice_poetry
+        ports:
+            - "50004:50004"
+        deploy:
+            replicas: 2
+        working_dir: /code
+        command: sh -c "PYTHONPATH=. python exampleservice/service.py"

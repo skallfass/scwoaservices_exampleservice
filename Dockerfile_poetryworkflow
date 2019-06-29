@@ -1,0 +1,38 @@
+FROM python:3.7.3-alpine3.9
+
+ARG YOUR_ENV
+
+ENV YOUR_ENV=${YOUR_ENV} \
+  PYTHONFAULTHANDLER=1 \
+  PYTHONUNBUFFERED=1 \
+  PYTHONHASHSEED=random \
+  PIP_NO_CACHE_DIR=on \
+  PIP_DISABLE_PIP_VERSION_CHECK=on \
+  PIP_DEFAULT_TIMEOUT=100 \
+  POETRY_VERSION=0.12.16
+
+WORKDIR /root/.ssh
+COPY .ssh/* /root/.ssh/
+WORKDIR /code
+COPY poetry.lock pyproject.toml /code/
+
+# System deps:
+RUN python -m pip install pip==19.0.3 && \
+    apk add --no-cache --virtual build-base  && \
+    apk add --no-cache --virtual git && \
+    apk add --no-cache --virtual openssh && \
+    git config --global user.name "dummy user" && \
+    git config --global user.email dummy@user.com && \
+    ssh-keyscan -H github.com >> ~/.ssh/known_hosts && \
+    pip --no-cache-dir install "poetry==$POETRY_VERSION" && \
+    poetry config settings.virtualenvs.create false && \
+    poetry install --no-dev --no-interaction --no-ansi && \
+    apk del build-base && \
+    apk del git && \
+    apk del openssh && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf $HOME/.cache/pypoetry/cache/repositories/* && \
+    pip uninstall poetry -y && \
+    rm -rf $HOME/.cache/pip/*
+
+COPY . /code

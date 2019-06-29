@@ -1,0 +1,8 @@
+site_name: exampleservice
+nav:
+    - Home: index.md
+    - usage:
+        - usage: usage.md
+        - example: example.md
+    - reference:
+        - exampleservice: exampleservice.md

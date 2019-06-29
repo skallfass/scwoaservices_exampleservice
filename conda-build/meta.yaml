@@ -1,0 +1,50 @@
+{% set data = load_setup_py_data() %}
+
+package:
+    name: "sc_exampleservice"
+    version: {{ data.get('version') }}
+
+source:
+    path: ..
+
+build:
+    build: {{ environ.get('GIT_DESCRIBE_NUMBER', 0) }}
+    preserve_egg_dir: True
+    script: python -m pip install --no-deps --ignore-installed .
+    entry_points:
+        - create_docu = scwoaservices.tools.create_docu:main
+
+requirements:
+    build:
+        - python 3.7.3
+        - pip
+        - setuptools
+    run:
+        - python 3.7.3
+        - scwoaservices >=0.1.0
+
+test:
+    imports:
+        - exampleservice
+        - exampleservice.blueprints
+        - exampleservice.blueprints.example_api
+        - exampleservice.errors
+        - exampleservice.models
+        - exampleservice.models.example_api
+        - exampleservice.models.validators
+        - exampleservice.options
+        - exampleservice.processing
+        - exampleservice.processing.example_api
+        - exampleservice.rules
+        - exampleservice.service
+
+extra:
+    env_name: "sc_exampleservice"
+    dev_requirements:
+        - ipython >=7.5.0
+        - isort >=4.3.21
+        - mkdocs >=1.0.4
+        - monkeytype >=19.5.0
+        - pydoc-markdown >=2.0.5
+        - pylint >=2.3.1
+        - yapf >=0.27.0

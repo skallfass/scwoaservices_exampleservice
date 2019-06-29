@@ -1,0 +1,13 @@
+version: '2'
+services:
+    sanicbaseservice:
+        build:
+            context: .
+            dockerfile: Dockerfile_condaworkflow
+        image: exampleservice_conda
+        expose:
+            - "50004"
+        ports:
+            - "50004:50004"
+        working_dir: /code
+        command: sh -c "PYTHONPATH=. /shared/conda/envs/sc_exampleservice/bin/python exampleservice/service.py --workers 1"

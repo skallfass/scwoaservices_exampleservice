@@ -1,0 +1,7 @@
+FROM base_conda
+
+ADD . /code
+WORKDIR /code
+
+RUN /opt/conda/bin/conda env create -f environment.yml && \
+    rm -rf /tmp/* /shared/conda/pkgs/*
