@@ -7,7 +7,9 @@ from sanic.log import logger
 from sanic.request import Request
 from sanic.response import HTTPResponse
 
-from scwoaservices.decorators import service_endpoint
+from scwoaservices.decorators import api_documentation
+from scwoaservices.decorators import api_inputmodel
+from scwoaservices.decorators import api_outputmodel
 
 from exampleservice.models.example_api import InputModel
 from exampleservice.models.example_api import OutputModel
@@ -19,14 +21,14 @@ API = '/example'
 BLUEPRINT = Blueprint(NAME, API)
 
 
-@service_endpoint(rules=SERVICERULES,
-                  service_logger=logger,
-                  api=API,
-                  blueprint=BLUEPRINT,
-                  summary='example api',
-                  in_model=InputModel,
-                  out_model=OutputModel,
-                  out_model_description='the output for the example request.')
+@BLUEPRINT.post('', strict_slashes=True)
+@api_documentation(api=API, summary='example api', in_model=InputModel,
+                   out_model=OutputModel,
+                   out_description='the output for the example request.')
+@api_inputmodel(api=API, model=InputModel,
+                servicename=SERVICERULES.servicename, service_logger=logger)
+@api_outputmodel(api=API, model=OutputModel,
+                 servicename=SERVICERULES.servicename, service_logger=logger)
 async def api_example(request: Request, service_params: InputModel,
                       service_logger: logger) -> HTTPResponse:
     """
