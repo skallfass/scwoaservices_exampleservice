@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "exampleservice"
-version = "0.1.0"
+version = "0.2.0"
 description = ""
 license = "MIT"
 authors = ["Simon Kallfass <skallfass@ouroboros.info>"]
@@ -9,7 +9,7 @@ repository = "git@gitlab.com:skallfass/exampleservice.git"
 
 [tool.poetry.dependencies]
 python = "^3.7"
-scwoaservices = {git = "git@github.com:skallfass/scwoaservices_poetry.git", tag = "0.1.0"}
+scwoaservices = {git = "git@github.com:skallfass/scwoaservices_poetry.git", tag = "0.2.1"}
 
 [tool.poetry.dev-dependencies]
 pytest = "^3.0"
